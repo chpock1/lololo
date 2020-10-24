@@ -1,18 +1,24 @@
 extends layout
 
 block content
-    div#console
-    input#inputFile(type="file" name="picField" size="24" onchange="test(event)" alt="")
-    img#img(crossorigin
-        width="650"
-        height="650")
+    .blockKontent
+        h1 E.V.A
+        p.logo evaluator
+        .borderRoom
+            div#console
+            .anilizeImage
+                img.image#img(crossorigin)
+            input.inpDownloadImg#inputFile(type="file" name="picField" size="24" multiple="multiple" onchange="test(event)" alt="")
+            .textOutput
+                p.Output здесь должен быть текст
     script.
         let net;
-        //const imageColors = require('imagecolors');
+        let filesImg=[];
         function test(event){
-            console.log(event)
+            console.log(event.target.files)
             var selectedFile = event.target.files[0];
             var reader = new FileReader();
+
             var imgtag = document.getElementById("img");
             imgtag.title = selectedFile.name;
 
@@ -31,14 +37,14 @@ block content
             var formData = new FormData();
             formData.append("file",selectedFile);
             $.ajax({
-                url: "http://192.168.1.138:3003/colorsImg",
+                url: "http://192.168.1.138:3000/colorsImg",
                 type: "POST",
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (res) {
                     console.log(res)
-                    $.post("http://192.168.1.138:3003/colors",{name:res.name},(resTwo)=>{
+                    $.post("http://192.168.1.138:3000/colors",{name:res.name},(resTwo)=>{
                                 console.log(resTwo)
                     });
                 }
