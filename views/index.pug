@@ -1,0 +1,32 @@
+extends layout
+
+block content
+    div#console
+    input(type="file" name="picField" size="24" onchange="test(event)" alt="")
+    img#img(crossorigin
+        width="650"
+        height="650")
+    script.
+        let net;
+        function test(event){
+            var selectedFile = event.target.files[0];
+            var reader = new FileReader();
+
+            var imgtag = document.getElementById("img");
+            imgtag.title = selectedFile.name;
+
+            reader.onload = function (event) {
+                imgtag.src = event.target.result;
+            };
+
+            reader.readAsDataURL(selectedFile);
+            app()
+        };
+        async function app() {
+            net = await mobilenet.load();
+            const imgEl = document.getElementById('img');
+            const result = await net.classify(imgEl, 5);
+            console.log(result);
+        }
+
+        app();
