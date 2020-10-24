@@ -2,16 +2,17 @@ extends layout
 
 block content
     div#console
-    input(type="file" name="picField" size="24" onchange="test(event)" alt="")
+    input#inputFile(type="file" name="picField" size="24" onchange="test(event)" alt="")
     img#img(crossorigin
         width="650"
         height="650")
     script.
         let net;
+        //const imageColors = require('imagecolors');
         function test(event){
+            console.log(event)
             var selectedFile = event.target.files[0];
             var reader = new FileReader();
-
             var imgtag = document.getElementById("img");
             imgtag.title = selectedFile.name;
 
@@ -20,13 +21,26 @@ block content
             };
 
             reader.readAsDataURL(selectedFile);
-            app()
+            app(selectedFile)
         };
-        async function app() {
+        async function app(selectedFile) {
             net = await mobilenet.load();
-            const imgEl = document.getElementById('img');
-            const result = await net.classify(imgEl, 5);
-            console.log(result);
+            //const imgEl = document.getElementById('img');
+            //const result = await net.classify(imgEl, 5);
+            //console.log(result);
+            var formData = new FormData();
+            formData.append("file",selectedFile);
+            $.ajax({
+                url: "http://192.168.1.138:3003/colorsImg",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    console.log(res)
+                    $.post("http://192.168.1.138:3003/colors",{name:res.name},(resTwo)=>{
+                                console.log(resTwo)
+                    });
+                }
+            });
         }
-
-        app();
