@@ -16,12 +16,12 @@ block content
         let neuralCats=[0,0,0,0]
         let net;
         function test(event){
-
+            textId.textContent=''
+            colorId.textContent=''
             var selectedFile = event.target.files[0];
             var reader = new FileReader();
             var imgtag = document.getElementById("img");
             imgtag.title = selectedFile.name;
-
             reader.onload = function (event) {
                 imgtag.src = event.target.result;
             };
