@@ -3,7 +3,6 @@ var router = express.Router();
 multiparty = require('multiparty');
 var imageColors = require('imagecolors');
 const fs = require('fs');
-const colors=''
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -28,6 +27,7 @@ router.post('/colorsImg', function(req, res){
   });
   form.on('close', function() {
     if(errors.length == 0) {
+
       res.send({status: 'ok', text: 'Success',name:nameImg});
     }
     else {
@@ -42,7 +42,6 @@ router.post('/colorsImg', function(req, res){
     uploadFile.type = part.headers['content-type']
     uploadFile.path = './' + part.filename;
     nameImg=part.filename;
-    console.log(part)
     if(uploadFile.size > maxSize) {
       errors.push('File size is ' + uploadFile.size + '. Limit is' + (maxSize / 1024 / 1024) + 'MB.');
     }
@@ -59,15 +58,17 @@ router.post('/colorsImg', function(req, res){
   });
 
   form.parse(req);
-
-
 });
 router.post('/colors', function(req, res){
-
-  imageColors.extract('./'+req.body.name, 6, function (err, colors) {
-    this.colors=colors
-  });
-  res.send(this.colors)
+  lol()
+  let color=''
+  async function lol(){
+    await imageColors.extract('./'+req.body.name, 5, function (err, colors) {
+      color=colors
+      res.send(color)
+      fs.unlinkSync('./'+req.body.name)
+    });
+  }
 });
 
 module.exports = router;

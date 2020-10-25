@@ -1,24 +1,16 @@
 extends layout
-
 block content
-    .blockKontent
-        h1 E.V.A
-        p.logo evaluator
-        .borderRoom
-            div#console
-            .anilizeImage
-                img.image#img(crossorigin)
-            input.inpDownloadImg#inputFile(type="file" name="picField" size="24" multiple="multiple" onchange="test(event)" alt="")
-            .textOutput
-                p.Output здесь должен быть текст
+    div#console
+    input#inputFile(type="file" name="picField" size="24" onchange="test(event)" alt="")
+    img#img(crossorigin
+        width="650"
+        height="650")
     script.
+        let neuralCats=[0,0,0,0]
         let net;
-        let filesImg=[];
         function test(event){
-            console.log(event.target.files)
             var selectedFile = event.target.files[0];
             var reader = new FileReader();
-
             var imgtag = document.getElementById("img");
             imgtag.title = selectedFile.name;
 
@@ -31,22 +23,27 @@ block content
         };
         async function app(selectedFile) {
             net = await mobilenet.load();
-            //const imgEl = document.getElementById('img');
-            //const result = await net.classify(imgEl, 5);
-            //console.log(result);
+            const imgEl = document.getElementById('img');
+            const result = await net.classify(imgEl, 4);
+            console.log(result)
+            neuralCats=[0,0,0,0]
+            result.forEach(type => {if (type.className.includes('prison') || type.className.includes('sliding door') || type.className.includes('mosquito')|| type.className.includes('dust')) neuralCats[3]=neuralCats[3]+type.probability; else if(type.className.includes('theater') || type.className.includes('studio couch')|| type.className.includes('studio couch')|| type.className.includes('restaurant')) neuralCats[0]=neuralCats[0]+type.probability; else if ( type.className.includes('bathtub') || type.className.includes('radiator') || type.className.includes('welcome mat') || type.className.includes('doormat')|| type.className.includes('paper')|| type.className.includes('mousetrap')|| type.className.includes('carton')||type.className.includes('closet')||type.className.includes('bookcase')) neuralCats[2] = neuralCats[2] + type.probability; else if (type.className.includes('microwave') || type.className.includes('television') || type.className.includes('dishwashing') || type.className.includes('shower') || type.className.includes('board')|| type.className.includes('cabinet')|| type.className.includes('prayer')|| type.className.includes('lavabo')) neuralCats[1] = neuralCats[1] + type.probability})
+            if(neuralCats[0]>0&&neuralCats[3]>0) {neuralCats[1]=neuralCats[1]+neuralCats[0]; neuralCats[2] = neuralCats[2] + neuralCats[3];}
+            if(neuralCats[0]>0&&neuralCats[3]===0&&neuralCats[2]>0) neuralCats[1]=neuralCats[1]+neuralCats[2]+neuralCats[0]
+            if(neuralCats[3] > 0 && neuralCats[0] === 0 && neuralCats[1] > 0) neuralCats[2] = neuralCats[1] + neuralCats[2] + neuralCats[3]
+            console.log(neuralCats)
             var formData = new FormData();
-            formData.append("file",selectedFile);
+            formData.append("file", selectedFile);
             $.ajax({
-                url: "http://192.168.1.138:3000/colorsImg",
+                url: "http://192.168.1.138:3003/colorsImg",
                 type: "POST",
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (res) {
-                    console.log(res)
-                    $.post("http://192.168.1.138:3000/colors",{name:res.name},(resTwo)=>{
-                                console.log(resTwo)
+                    $.post("http://192.168.1.138:3003/colors", {name: res.name}, (resTwo) => {
+                        //console.log(resTwo)
                     });
                 }
-            });
+            })
         }
