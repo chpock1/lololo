@@ -1,14 +1,22 @@
 extends layout
 block content
-    div#console
-    input#inputFile(type="file" name="picField" size="24" onchange="test(event)" alt="")
-    img#img(crossorigin
-        width="650"
-        height="650")
+    .blockKontent
+        h1 E.V.A
+        p.logo evaluator
+        .borderRoom
+            div#console
+            .anilizeImage
+                img.image#img(crossorigin)
+            input.inpDownloadImg#inputFile(type="file" name="picField" size="24" onchange="test(event)" alt="")
+            .textOutput
+                p#text
+            .textOutput
+                p#color
     script.
         let neuralCats=[0,0,0,0]
         let net;
         function test(event){
+
             var selectedFile = event.target.files[0];
             var reader = new FileReader();
             var imgtag = document.getElementById("img");
@@ -17,71 +25,92 @@ block content
             reader.onload = function (event) {
                 imgtag.src = event.target.result;
             };
-
             reader.readAsDataURL(selectedFile);
             app(selectedFile)
         };
         async function app(selectedFile) {
+            let  textId = document.getElementById('text')
+            let colorId=document.getElementById('color')
             net = await mobilenet.load();
             const imgEl = document.getElementById('img');
             const result = await net.classify(imgEl, 4);
-            console.log(result)
             neuralCats=[0,0,0,0]
             result.forEach(type => {if (type.className.includes('prison') || type.className.includes('sliding door') || type.className.includes('mosquito')|| type.className.includes('dust')) neuralCats[3]=neuralCats[3]+type.probability; else if(type.className.includes('theater') || type.className.includes('studio couch')|| type.className.includes('studio couch')|| type.className.includes('restaurant')) neuralCats[0]=neuralCats[0]+type.probability; else if ( type.className.includes('bathtub') || type.className.includes('radiator') || type.className.includes('welcome mat') || type.className.includes('doormat')|| type.className.includes('paper')|| type.className.includes('mousetrap')|| type.className.includes('carton')||type.className.includes('closet')||type.className.includes('bookcase')) neuralCats[2] = neuralCats[2] + type.probability; else if (type.className.includes('microwave') || type.className.includes('television') || type.className.includes('dishwashing') || type.className.includes('shower') || type.className.includes('board')|| type.className.includes('cabinet')|| type.className.includes('prayer')|| type.className.includes('lavabo')) neuralCats[1] = neuralCats[1] + type.probability})
             if(neuralCats[0]>0&&neuralCats[3]>0) {neuralCats[1]=neuralCats[1]+neuralCats[0]; neuralCats[2] = neuralCats[2] + neuralCats[3];}
             if(neuralCats[0]>0&&neuralCats[3]===0&&neuralCats[2]>0) neuralCats[1]=neuralCats[1]+neuralCats[2]+neuralCats[0]
             if(neuralCats[3] > 0 && neuralCats[0] === 0 && neuralCats[1] > 0) neuralCats[2] = neuralCats[1] + neuralCats[2] + neuralCats[3]
-            console.log(neuralCats)
+            console.log(neuralCats[0],neuralCats[1],neuralCats[2],neuralCats[3])
+            for(let i=0;i<4;i++){
+                for (let k = 0; k < 4; k++) {
+                    if(neuralCats[i]<neuralCats[k]){
+
+                         if (neuralCats[k] === neuralCats[0]) {
+                             textId.textContent='люкс'
+                        }
+                         if (neuralCats[k] === neuralCats[1] && neuralCats[k] > neuralCats[0]) {
+                             textId.textContent='стандартный ремонт'
+                        }
+                         if (neuralCats[k] === neuralCats[2] && neuralCats[k] > neuralCats[1]) {
+                             textId.textContent='требует косметического ремонта'
+                        } if(neuralCats[k] === neuralCats[3]){
+                            textId.textContent='без отделки'
+                        }
+                        if (neuralCats[0] === neuralCats[1] && neuralCats[2] === neuralCats[3]) {
+                            textId.textContent='не определено'
+                        }
+                    }
+                }
+
+            }
             var formData = new FormData();
             formData.append("file", selectedFile);
             let styleColor=[]
             $.ajax({
-                url: "http://192.168.1.138:3003/colorsImg",
+                url: "http://192.168.1.101:3003/colorsImg",
                 type: "POST",
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (res) {
-                    $.post("http://192.168.1.138:3003/colors", {name: res.name}, resTwo => {
+                    $.post("http://192.168.1.101:3003/colors", {name: res.name}, resTwo => {
                          resTwo.forEach(color=>{
                              if(styleColor.indexOf(color.family)===-1&&color.family!=='neutral') styleColor.push(color.family)
                          })
-                        if(styleColor.length>3) console.log('dizayn govno')
+                        if(styleColor.length>3) colorId.textContent='E.V.A определила, что используемая политра цветов плохо сочетается в данном помещении'
                         else {
                            switch (JSON.stringify(styleColor).sort) {
                                 case JSON.stringify(['green', 'blue']).sort:
-                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    colorId.textContent='E.V.A определила, что  используемая политра цветов хорошо сочетается в данном помещении'
                                     break
                                 case JSON.stringify(['light', 'green']).sort:
-                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    colorId.textContent='E.V.A определила, что  используемая политра цветов хорошо сочетается в данном помещении'
                                     break
                                 case JSON.stringify(['pink', 'green']).sort:
-                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    colorId.textContent='E.V.A определила, что  используемая политра цветов хорошо сочетается в данном помещении'
                                     break
                                 case JSON.stringify(['light','brown']).sort:
-                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    colorId.textContent='E.V.A определила, что  используемая политра цветов хорошо сочетается в данном помещении'
                                     break
                                 case JSON.stringify(['purple', 'blue', 'orange']).sort:
-                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    colorId.textContent='E.V.A определила, что  используемая политра цветов хорошо сочетается в данном помещении'
                                     break
                                 case JSON.stringify(['purple', 'brown', 'pink']).sort:
-                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    colorId.textContent='E.V.A определила, что  используемая политра цветов хорошо сочетается в данном помещении'
                                     break
                                 case JSON.stringify(['pink', 'blue', 'orange']).sort:
-                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    colorId.textContent='E.V.A определила, что  используемая политра цветов хорошо сочетается в данном помещении'
                                     break
                                 case JSON.stringify(['yellow', 'grey']).sort:
-                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    colorId.textContent='E.V.A определила, что  используемая политра цветов хорошо сочетается в данном помещении'
                                     break
                                 case JSON.stringify(['blue', 'grey', 'yellow']).sort:
-                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    colorId.textContent='E.V.A определила, что  используемая политра цветов хорошо сочетается в данном помещении'
                                     break
                                 case JSON.stringify(['dark', 'light']).sort:
-                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    colorId.textContent='E.V.A определила, что  используемая политра цветов хорошо сочетается в данном помещении'
                                     break
                             }
                         }
-                        console.log(styleColor)
                     });
                 }
             })

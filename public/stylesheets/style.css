@@ -26,15 +26,16 @@ a {
   justify-content: center;
 }
 .anilizeImage {
-  width: 450px;
-  height: 450px;
+  width: 48%;
+  height: 512px;
+
   background: #FFFFFF;
   border: 2px solid #6D76A5;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
-  float:left;
+  float: left;
   margin-top: 60px;
-  margin-left:53px;
+  margin-left: 53px;
   overflow: hidden;
 }
 .inpDownloadImg{
@@ -45,20 +46,22 @@ a {
 }
 .blockKontent{
   border: 1px solid black;
-  width: 1030px;
-  height: 850px;
+  width: 105.5%;
+  height: 1130px;
+  margin-left: -58px;
+  margin-top: -58px;
   background: linear-gradient(144.96deg, #10234D 13.62%, rgba(28, 51, 92, 0.987826) 25.57%, rgba(62, 96, 128, 0.93939) 38.5%, rgba(60, 112, 143, 0.844346) 43.37%, rgba(54, 178, 205, 0.464821) 59.52%, rgba(70, 149, 167, 0.454674) 64.62%, rgba(88, 146, 158, 0.442708) 64.63%, rgba(28, 108, 166, 0.441767) 79.39%, rgba(0, 0, 0, 0) 120.39%);
 }
 .borderRoom{
-  width: 970px;
-  height: 569px;
+  width: 80%;
+  height: 668px;
   background: rgba(0, 29, 63, 0.29);
   border: 2px solid #000000;
   box-sizing: border-box;
   border-radius: 10px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: -46px;
+  margin-top: 84px
 }
 .imgCat{
 
@@ -69,14 +72,14 @@ h1{
   font-weight: normal;
   font-size: 72px;
   text-align: center;
-  margin-right: 25%;
+  margin-right: 30%;
   margin-left: 32%;
   border-bottom: 1px solid #000000;
   color: #EDEEFA;
 }
 .logo{
   margin-right: 33%;
-  margin-left: 50%;
+  margin-left: 49%;
   position: relative;
   top: -47px;
   color: white;
@@ -100,11 +103,36 @@ h1{
 }
 .textOutput{
   float: left;
-  width: 43%;
+  width: 45%;
   height: 100px;
-  margin-top: 210px;
+  border: 1px solid black;
+  background: rgba(255, 255, 255 , 0.5);
+  border-radius: 20px;
+  margin-top: 136px;
   margin-left: 30px;
 }
 .Output{
   font-size: 15px;
+}
+#text{
+  width: 100%;
+  font-size: 35px;
+  color: white;
+  float: left;
+  text-align: center;
+  font-family: serif;
+  line-height: 25px;
+}
+body{
+  background: turquoise;
+}
+#color{
+  width: 100%;
+  font-size: 35px;
+  color: white;
+  float: left;
+  text-align: center;
+  font-family: serif;
+  line-height: 29px;
+  margin-top: 20px;
 }
