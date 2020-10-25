@@ -16,8 +16,8 @@ block content
         let neuralCats=[0,0,0,0]
         let net;
         function test(event){
-            textId.textContent=''
-            colorId.textContent=''
+            document.getElementById('text').textContent=''
+            document.getElementById('color').textContent=''
             var selectedFile = event.target.files[0];
             var reader = new FileReader();
             var imgtag = document.getElementById("img");
