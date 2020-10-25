@@ -56,7 +56,12 @@ block content
                             textId.textContent='без отделки'
                         }
                         if (neuralCats[0] === neuralCats[1] && neuralCats[2] === neuralCats[3]) {
-                            textId.textContent='не определено'
+                            if(neuralCats[0]>neuralCats[2]){
+                                textId.textContent='люкс или стандартный ремонт'
+                            }
+                            else{
+                                textId.textContent='без отделки или требует ремонта '
+                            }
                         }
                     }
                 }
