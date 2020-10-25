@@ -61,11 +61,9 @@ router.post('/colorsImg', function(req, res){
 });
 router.post('/colors', function(req, res){
   lol()
-  let color=''
   async function lol(){
     await imageColors.extract('./'+req.body.name, 5, function (err, colors) {
-      color=colors
-      res.send(color)
+      res.send(colors)
       fs.unlinkSync('./'+req.body.name)
     });
   }

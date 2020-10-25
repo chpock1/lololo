@@ -34,6 +34,7 @@ block content
             console.log(neuralCats)
             var formData = new FormData();
             formData.append("file", selectedFile);
+            let styleColor=[]
             $.ajax({
                 url: "http://192.168.1.138:3003/colorsImg",
                 type: "POST",
@@ -41,8 +42,46 @@ block content
                 processData: false,
                 contentType: false,
                 success: function (res) {
-                    $.post("http://192.168.1.138:3003/colors", {name: res.name}, (resTwo) => {
-                        //console.log(resTwo)
+                    $.post("http://192.168.1.138:3003/colors", {name: res.name}, resTwo => {
+                         resTwo.forEach(color=>{
+                             if(styleColor.indexOf(color.family)===-1&&color.family!=='neutral') styleColor.push(color.family)
+                         })
+                        if(styleColor.length>3) console.log('dizayn govno')
+                        else {
+                           switch (JSON.stringify(styleColor).sort) {
+                                case JSON.stringify(['green', 'blue']).sort:
+                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    break
+                                case JSON.stringify(['light', 'green']).sort:
+                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    break
+                                case JSON.stringify(['pink', 'green']).sort:
+                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    break
+                                case JSON.stringify(['light','brown']).sort:
+                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    break
+                                case JSON.stringify(['purple', 'blue', 'orange']).sort:
+                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    break
+                                case JSON.stringify(['purple', 'brown', 'pink']).sort:
+                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    break
+                                case JSON.stringify(['pink', 'blue', 'orange']).sort:
+                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    break
+                                case JSON.stringify(['yellow', 'grey']).sort:
+                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    break
+                                case JSON.stringify(['blue', 'grey', 'yellow']).sort:
+                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    break
+                                case JSON.stringify(['dark', 'light']).sort:
+                                    console.log('dizayn s sinimi b green pizdatyi')
+                                    break
+                            }
+                        }
+                        console.log(styleColor)
                     });
                 }
             })
